@@ -1,0 +1,1139 @@
+type LText = Data.Text.Internal.Lazy.Text
+type LByteString = Data.ByteString.Lazy.Internal.ByteString
+identity :: a -> a
+map :: Functor f => (a -> b) -> f a -> f b
+uncons :: [a] -> Maybe (a, [a])
+unsnoc :: [x] -> Maybe ([x], x)
+applyN :: Int -> (a -> a) -> a -> a
+Protolude.print :: (MonadIO m, Show a) => a -> m ()
+throwIO :: (MonadIO m, Exception e) => e -> m a
+throwTo :: (MonadIO m, Exception e) => ThreadId -> e -> m ()
+pass :: Applicative f => f ()
+guarded :: Alternative f => (a -> Bool) -> a -> f a
+guardedA ::
+  (Functor f, Alternative t) => (a -> f Bool) -> a -> f (t a)
+liftIO1 :: MonadIO m => (a -> IO b) -> a -> m b
+liftIO2 :: MonadIO m => (a -> b -> IO c) -> a -> b -> m c
+Protolude.show :: (Show a, StringConv GHC.Base.String b) => a -> b
+die :: Text -> IO a
+($) ::
+  forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r).
+  (a -> b) -> a -> b
+($!) :: (a -> b) -> a -> b
+($!!) :: NFData a => (a -> b) -> a -> b
+($>) :: Functor f => f a -> b -> f b
+(%) :: Integral a => a -> a -> Ratio a
+(&) :: a -> (a -> b) -> b
+(&&) :: Bool -> Bool -> Bool
+(&&^) :: Monad m => m Bool -> m Bool -> m Bool
+type (*) = *
+(++) :: [a] -> [a] -> [a]
+(.) :: (b -> c) -> (a -> b) -> a -> c
+type role (:*:) representational representational nominal
+data (:*:) (f :: * -> *) (g :: * -> *) p = (f p) :*: (g p)
+type role (:+:) representational representational nominal
+data (:+:) (f :: * -> *) (g :: * -> *) p = L1 (f p) | R1 (g p)
+type role (:.:) representational nominal nominal
+newtype (:.:) (f :: * -> *) (g :: * -> *) p
+  = Comp1 {unComp1 :: f (g p)}
+type role (:~:) nominal nominal
+data (:~:) (a :: k) (b :: k) where
+  Refl :: forall k (a :: k). (:~:) a a
+(<$!>) :: Monad m => (a -> b) -> m a -> m b
+(<$>) :: Functor f => (a -> b) -> f a -> f b
+(<&&>) :: Applicative a => a Bool -> a Bool -> a Bool
+(<&>) :: Functor f => f a -> (a -> b) -> f b
+(<**>) :: Applicative f => f a -> f (a -> b) -> f b
+(<<$>>) :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+(<<*>>) ::
+  (Applicative f, Applicative g) =>
+  f (g (a -> b)) -> f (g a) -> f (g b)
+(<=<) :: Monad m => (b -> m c) -> (a -> m b) -> a -> m c
+(<>) :: Monoid m => m -> m -> m
+(<||>) :: Applicative a => a Bool -> a Bool -> a Bool
+(=<<) :: Monad m => (a -> m b) -> m a -> m b
+type family (==) (a :: k) (b :: k) :: Bool
+(>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
+newtype All = All {getAll :: Bool}
+data AllocationLimitExceeded = AllocationLimitExceeded
+type role Alt representational nominal
+newtype Alt (f :: k -> *) (a :: k) = Alt {getAlt :: f a}
+class Applicative f => Alternative (f :: * -> *) where
+  empty :: f a
+  (<|>) :: f a -> f a -> f a
+  some :: f a -> f [a]
+  many :: f a -> f [a]
+  {-# MINIMAL empty, (<|>) #-}
+newtype Any = Any {getAny :: Bool}
+class Functor f => Applicative (f :: * -> *) where
+  pure :: a -> f a
+  (<*>) :: f (a -> b) -> f a -> f b
+  (*>) :: f a -> f b -> f b
+  (<*) :: f a -> f b -> f a
+  {-# MINIMAL pure, (<*>) #-}
+data ArithException
+  = Overflow
+  | Underflow
+  | LossOfPrecision
+  | DivideByZero
+  | Denormal
+  | RatioZeroDenominator
+data ArrayException
+  = IndexOutOfBounds GHC.Base.String
+  | UndefinedElement GHC.Base.String
+newtype AssertionFailed = AssertionFailed GHC.Base.String
+data Associativity
+  = LeftAssociative | RightAssociative | NotAssociative
+data Async a
+  = Control.Concurrent.Async.Async {asyncThreadId :: {-# UNPACK #-}ThreadId,
+                                    Control.Concurrent.Async._asyncWait :: STM
+                                                                             (Either
+                                                                                SomeException a)}
+data AsyncException
+  = StackOverflow | HeapOverflow | ThreadKilled | UserInterrupt
+class Protolude.Bifunctor (p :: * -> * -> *) where
+  Protolude.bimap :: (a -> b) -> (c -> d) -> p a c -> p b d
+  Protolude.first :: (a -> b) -> p a c -> p b c
+  Protolude.second :: (b -> c) -> p a b -> p a c
+  {-# MINIMAL bimap | first, second #-}
+class Eq a => Bits a where
+  (.&.) :: a -> a -> a
+  (.|.) :: a -> a -> a
+  xor :: a -> a -> a
+  complement :: a -> a
+  shift :: a -> Int -> a
+  rotate :: a -> Int -> a
+  zeroBits :: a
+  bit :: Int -> a
+  setBit :: a -> Int -> a
+  clearBit :: a -> Int -> a
+  complementBit :: a -> Int -> a
+  testBit :: a -> Int -> Bool
+  bitSizeMaybe :: a -> Maybe Int
+  bitSize :: a -> Int
+  isSigned :: a -> Bool
+  shiftL :: a -> Int -> a
+  Data.Bits.unsafeShiftL :: a -> Int -> a
+  shiftR :: a -> Int -> a
+  Data.Bits.unsafeShiftR :: a -> Int -> a
+  rotateL :: a -> Int -> a
+  rotateR :: a -> Int -> a
+  popCount :: a -> Int
+  {-# MINIMAL (.&.),
+              (.|.),
+              xor,
+              complement,
+              (shift | shiftL, shiftR),
+              (rotate | rotateL, rotateR),
+              bitSize, bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+data BlockedIndefinitelyOnMVar = BlockedIndefinitelyOnMVar
+data BlockedIndefinitelyOnSTM = BlockedIndefinitelyOnSTM
+data Bool = False | True
+class Bounded a where
+  minBound :: a
+  maxBound :: a
+  {-# MINIMAL minBound, maxBound #-}
+data ByteString
+  = Data.ByteString.Internal.PS {-# UNPACK #-}(GHC.ForeignPtr.ForeignPtr
+                                                 Word8)
+                                {-# UNPACK #-}Int
+                                {-# UNPACK #-}Int
+type C1 = M1 GHC.Generics.C :: Meta -> (* -> *) -> * -> *
+data CallStack
+  = GHC.Stack.Types.EmptyCallStack
+  | GHC.Stack.Types.PushCallStack [Char]
+                                  GHC.Stack.Types.SrcLoc
+                                  CallStack
+  | GHC.Stack.Types.FreezeCallStack CallStack
+data Chan a
+  = Control.Concurrent.Chan.Chan {-# UNPACK #-}(MVar
+                                                  (Control.Concurrent.Chan.Stream a))
+                                 {-# UNPACK #-}(MVar (Control.Concurrent.Chan.Stream a))
+data Char = GHC.Types.C# GHC.Prim.Char#
+type family CmpNat (a :: Nat) (b :: Nat) :: Ordering
+type role Coercible representational representational
+class a ~R# b => Coercible (a :: k) (b :: k)
+type role Coercion representational representational
+data Coercion (a :: k) (b :: k) where
+  Coercion :: forall k (a :: k) (b :: k).
+              Coercible a b =>
+              Coercion a b
+data Complex a = !a :+ !a
+newtype Concurrently a = Concurrently {runConcurrently :: IO a}
+type role Const representational phantom
+newtype Const a (b :: k) = Const {getConst :: a}
+data Constraint
+class Constructor (c :: k) where
+  conName :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                             -> *) (a :: k1).
+             t c f a -> [Char]
+  conFixity :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                               -> *) (a :: k1).
+               t c f a -> Fixity
+  conIsRecord :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                                 -> *) (a :: k1).
+                 t c f a -> Bool
+  {-# MINIMAL conName #-}
+type D1 = M1 GHC.Generics.D :: Meta -> (* -> *) -> * -> *
+class Datatype (d :: k) where
+  datatypeName :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                                  -> *) (a :: k1).
+                  t d f a -> [Char]
+  moduleName :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                                -> *) (a :: k1).
+                t d f a -> [Char]
+  packageName :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                                 -> *) (a :: k1).
+                 t d f a -> [Char]
+  isNewtype :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                               -> *) (a :: k1).
+               t d f a -> Bool
+  {-# MINIMAL datatypeName, moduleName, packageName #-}
+data Deadlock = Deadlock
+data Double = D# GHC.Prim.Double#
+newtype Down a = Down a
+newtype Dual a = Dual {getDual :: a}
+data Either a b = Left a | Right b
+newtype Endo a = Endo {appEndo :: a -> a}
+class Enum a where
+  succ :: a -> a
+  pred :: a -> a
+  toEnum :: Int -> a
+  fromEnum :: a -> Int
+  enumFrom :: a -> [a]
+  enumFromThen :: a -> a -> [a]
+  enumFromTo :: a -> a -> [a]
+  enumFromThenTo :: a -> a -> a -> [a]
+  {-# MINIMAL toEnum, fromEnum #-}
+class Eq a where
+  (==) :: a -> a -> Bool
+  (/=) :: a -> a -> Bool
+  {-# MINIMAL (==) | (/=) #-}
+pattern ErrorCall :: GHC.Base.String -> ErrorCall
+data ErrorCall
+  = ErrorCallWithLocation GHC.Base.String GHC.Base.String
+type Except e = ExceptT e Identity :: * -> *
+type role ExceptT nominal representational nominal
+newtype ExceptT e (m :: * -> *) a = ExceptT (m (Either e a))
+class (Typeable e, Show e) => Exception e where
+  toException :: e -> SomeException
+  fromException :: SomeException -> Maybe e
+  displayException :: e -> GHC.Base.String
+data ExitCode = ExitSuccess | ExitFailure Int
+data FatalError = FatalError {fatalErrorMessage :: Text}
+type FilePath = GHC.Base.String
+class Bits b => FiniteBits b where
+  finiteBitSize :: b -> Int
+  countLeadingZeros :: b -> Int
+  countTrailingZeros :: b -> Int
+  {-# MINIMAL finiteBitSize #-}
+newtype First a = First {getFirst :: Maybe a}
+data Fixity = Prefix | Infix Associativity Int
+data FixityI = PrefixI | InfixI Associativity Nat
+data Float = F# GHC.Prim.Float#
+class Fractional a => Floating a where
+  pi :: a
+  exp :: a -> a
+  log :: a -> a
+  sqrt :: a -> a
+  (**) :: a -> a -> a
+  logBase :: a -> a -> a
+  sin :: a -> a
+  cos :: a -> a
+  tan :: a -> a
+  asin :: a -> a
+  acos :: a -> a
+  atan :: a -> a
+  sinh :: a -> a
+  cosh :: a -> a
+  tanh :: a -> a
+  asinh :: a -> a
+  acosh :: a -> a
+  atanh :: a -> a
+  log1p :: a -> a
+  expm1 :: a -> a
+  log1pexp :: a -> a
+  log1mexp :: a -> a
+  {-# MINIMAL pi, exp, log, sin, cos, asin, acos, atan, sinh, cosh,
+              asinh, acosh, atanh #-}
+class Foldable (t :: * -> *) where
+  fold :: Monoid m => t m -> m
+  foldMap :: Monoid m => (a -> m) -> t a -> m
+  foldr :: (a -> b -> b) -> b -> t a -> b
+  foldr' :: (a -> b -> b) -> b -> t a -> b
+  foldl :: (b -> a -> b) -> b -> t a -> b
+  foldl' :: (b -> a -> b) -> b -> t a -> b
+  List.foldr1 :: (a -> a -> a) -> t a -> a
+  List.foldl1 :: (a -> a -> a) -> t a -> a
+  toList :: t a -> [a]
+  null :: t a -> Bool
+  length :: t a -> Int
+  elem :: Eq a => a -> t a -> Bool
+  maximum :: Ord a => t a -> a
+  minimum :: Ord a => t a -> a
+  List.sum :: Num a => t a -> a
+  List.product :: Num a => t a -> a
+  {-# MINIMAL foldMap | foldr #-}
+class Num a => Fractional a where
+  (/) :: a -> a -> a
+  recip :: a -> a
+  fromRational :: Rational -> a
+  {-# MINIMAL fromRational, (recip | (/)) #-}
+type role FunPtr phantom
+data FunPtr a = GHC.Ptr.FunPtr GHC.Prim.Addr#
+class Functor (f :: * -> *) where
+  fmap :: (a -> b) -> f a -> f b
+  (<$) :: a -> f b -> f a
+  {-# MINIMAL fmap #-}
+class Generic a where
+  type family Rep a :: * -> *
+  from :: a -> Rep a x
+  to :: Rep a x -> a
+  {-# MINIMAL from, to #-}
+class Generic1 (f :: * -> *) where
+  type family GHC.Generics.Rep1 (f :: * -> *) :: * -> *
+  GHC.Generics.from1 :: f a -> GHC.Generics.Rep1 f a
+  GHC.Generics.to1 :: GHC.Generics.Rep1 f a -> f a
+  {-# MINIMAL from1, to1 #-}
+data Handle
+  = GHC.IO.Handle.Types.FileHandle FilePath
+                                   {-# UNPACK #-}(MVar GHC.IO.Handle.Types.Handle__)
+  | GHC.IO.Handle.Types.DuplexHandle FilePath
+                                     {-# UNPACK #-}(MVar GHC.IO.Handle.Types.Handle__)
+                                     {-# UNPACK #-}(MVar GHC.IO.Handle.Types.Handle__)
+type HasCallStack = ?callStack::CallStack :: Constraint
+class Hashable a where
+  hashWithSalt :: Int -> a -> Int
+  default hashWithSalt :: (Generic a,
+                           hashable-1.2.4.0:Data.Hashable.Class.GHashable (Rep a)) =>
+                          Int -> a -> Int
+  hash :: a -> Int
+newtype IO a
+  = GHC.Types.IO (GHC.Prim.State# GHC.Prim.RealWorld
+                  -> (# GHC.Prim.State# GHC.Prim.RealWorld, a #))
+data IOException
+  = GHC.IO.Exception.IOError {GHC.IO.Exception.ioe_handle :: Maybe
+                                                               Handle,
+                              GHC.IO.Exception.ioe_type :: GHC.IO.Exception.IOErrorType,
+                              GHC.IO.Exception.ioe_location :: GHC.Base.String,
+                              GHC.IO.Exception.ioe_description :: GHC.Base.String,
+                              GHC.IO.Exception.ioe_errno :: Maybe Foreign.C.Types.CInt,
+                              GHC.IO.Exception.ioe_filename :: Maybe FilePath}
+data IOMode = ReadMode | WriteMode | AppendMode | ReadWriteMode
+newtype Identity a = Identity {runIdentity :: a}
+data Int = GHC.Types.I# GHC.Prim.Int#
+data Int16 = GHC.Int.I16# GHC.Prim.Int#
+data Int32 = GHC.Int.I32# GHC.Prim.Int#
+data Int64 = GHC.Int.I64# GHC.Prim.Int#
+data Int8 = GHC.Int.I8# GHC.Prim.Int#
+data IntMap a
+  = containers-0.5.7.1:Data.IntMap.Base.Bin {-# UNPACK #-}containers-0.5.7.1:Data.IntMap.Base.Prefix
+                                            {-# UNPACK #-}containers-0.5.7.1:Data.IntMap.Base.Mask
+                                            !(IntMap a)
+                                            !(IntMap a)
+  | containers-0.5.7.1:Data.IntMap.Base.Tip {-# UNPACK #-}containers-0.5.7.1:Data.IntSet.Base.Key
+                                            a
+  | containers-0.5.7.1:Data.IntMap.Base.Nil
+newtype IntPtr = Foreign.Ptr.IntPtr Int
+data IntSet
+  = containers-0.5.7.1:Data.IntSet.Base.Bin {-# UNPACK #-}containers-0.5.7.1:Data.IntSet.Base.Prefix
+                                            {-# UNPACK #-}containers-0.5.7.1:Data.IntSet.Base.Mask
+                                            !IntSet
+                                            !IntSet
+  | containers-0.5.7.1:Data.IntSet.Base.Tip {-# UNPACK #-}containers-0.5.7.1:Data.IntSet.Base.Prefix
+                                            {-# UNPACK #-}containers-0.5.7.1:Data.IntSet.Base.BitMap
+  | containers-0.5.7.1:Data.IntSet.Base.Nil
+data Integer
+  = integer-gmp-1.0.0.1:GHC.Integer.Type.S# !GHC.Prim.Int#
+  | integer-gmp-1.0.0.1:GHC.Integer.Type.Jp# {-# UNPACK #-}integer-gmp-1.0.0.1:GHC.Integer.Type.BigNat
+  | integer-gmp-1.0.0.1:GHC.Integer.Type.Jn# {-# UNPACK #-}integer-gmp-1.0.0.1:GHC.Integer.Type.BigNat
+class (Real a, Enum a) => Integral a where
+  quot :: a -> a -> a
+  rem :: a -> a -> a
+  div :: a -> a -> a
+  mod :: a -> a -> a
+  quotRem :: a -> a -> (a, a)
+  divMod :: a -> a -> (a, a)
+  toInteger :: a -> Integer
+  {-# MINIMAL quotRem, toInteger #-}
+class IsLabel (x :: Symbol) a where
+  fromLabel :: GHC.Prim.Proxy# x -> a
+  {-# MINIMAL fromLabel #-}
+class IsString a where
+  Data.String.fromString :: GHC.Base.String -> a
+  {-# MINIMAL fromString #-}
+type role K1 phantom representational phantom
+newtype K1 i c p = K1 {unK1 :: c}
+class KnownNat (n :: Nat) where
+  GHC.TypeLits.natSing :: GHC.TypeLits.SNat n
+  {-# MINIMAL natSing #-}
+class KnownSymbol (n :: Symbol) where
+  GHC.TypeLits.symbolSing :: GHC.TypeLits.SSymbol n
+  {-# MINIMAL symbolSing #-}
+newtype Last a = Last {getLast :: Maybe a}
+data Leniency = Lenient | Strict
+data Location
+  = Location {objectName :: GHC.Base.String,
+              functionName :: GHC.Base.String,
+              srcLoc :: Maybe SrcLoc}
+type role M1 phantom phantom representational nominal
+newtype M1 i (c :: Meta) (f :: * -> *) p = M1 {unM1 :: f p}
+data MVar a = GHC.MVar.MVar (GHC.Prim.MVar# GHC.Prim.RealWorld a)
+type role Map nominal representational
+data Map k a
+  = containers-0.5.7.1:Data.Map.Base.Bin {-# UNPACK #-}containers-0.5.7.1:Data.Map.Base.Size
+                                         !k
+                                         a
+                                         !(Map k a)
+                                         !(Map k a)
+  | containers-0.5.7.1:Data.Map.Base.Tip
+data MaskingState
+  = Unmasked | MaskedInterruptible | MaskedUninterruptible
+data Maybe a = Nothing | Just a
+data Meta
+  = MetaData Symbol Symbol Symbol Bool
+  | MetaCons Symbol FixityI Bool
+  | MetaSel (Maybe Symbol)
+            GHC.Generics.SourceUnpackedness
+            GHC.Generics.SourceStrictness
+            GHC.Generics.DecidedStrictness
+class Applicative m => Monad (m :: * -> *) where
+  (>>=) :: m a -> (a -> m b) -> m b
+  (>>) :: m a -> m b -> m b
+  return :: a -> m a
+  GHC.Base.fail :: GHC.Base.String -> m a
+  {-# MINIMAL (>>=) #-}
+class Monad m => MonadError e (m :: * -> *) | m -> e where
+  throwError :: e -> m a
+  catchError :: m a -> (e -> m a) -> m a
+  {-# MINIMAL throwError, catchError #-}
+class Monad m => MonadIO (m :: * -> *) where
+  liftIO :: IO a -> m a
+  {-# MINIMAL liftIO #-}
+class (Alternative m, Monad m) => MonadPlus (m :: * -> *) where
+  mzero :: m a
+  mplus :: m a -> m a -> m a
+class Monad m => MonadReader r (m :: * -> *) | m -> r where
+  ask :: m r
+  local :: (r -> r) -> m a -> m a
+  reader :: (r -> a) -> m a
+  {-# MINIMAL (ask | reader), local #-}
+class Monad m => MonadState s (m :: * -> *) | m -> s where
+  get :: m s
+  put :: s -> m ()
+  state :: (s -> (a, s)) -> m a
+  {-# MINIMAL state | get, put #-}
+class Monoid a where
+  mempty :: a
+  mappend :: a -> a -> a
+  mconcat :: [a] -> a
+  {-# MINIMAL mempty, mappend #-}
+class NFData a where
+  rnf :: a -> ()
+  default rnf :: (Generic a, Control.DeepSeq.GNFData (Rep a)) =>
+                 a -> ()
+data Nat
+data NestedAtomically = NestedAtomically
+newtype NoMethodError = NoMethodError GHC.Base.String
+data NonEmpty a = a :| [a]
+data NonTermination = NonTermination
+class Num a where
+  (+) :: a -> a -> a
+  (-) :: a -> a -> a
+  (*) :: a -> a -> a
+  negate :: a -> a
+  abs :: a -> a
+  signum :: a -> a
+  fromInteger :: Integer -> a
+  {-# MINIMAL (+), (*), abs, signum, fromInteger, (negate | (-)) #-}
+type OnDecodeError = OnError Word8 Char
+type OnError a b = GHC.Base.String -> Maybe a -> Maybe b
+newtype Option a = Option {getOption :: Maybe a}
+class Eq a => Ord a where
+  compare :: a -> a -> Ordering
+  (<) :: a -> a -> Bool
+  (<=) :: a -> a -> Bool
+  (>) :: a -> a -> Bool
+  (>=) :: a -> a -> Bool
+  max :: a -> a -> a
+  min :: a -> a -> a
+  {-# MINIMAL compare | (<=) #-}
+data Ordering = LT | EQ | GT
+newtype PatternMatchFail = PatternMatchFail GHC.Base.String
+class Print a where
+  hPutStr :: MonadIO m => Handle -> a -> m ()
+  Protolude.putStr :: MonadIO m => a -> m ()
+  hPutStrLn :: MonadIO m => Handle -> a -> m ()
+  Protolude.putStrLn :: MonadIO m => a -> m ()
+  putErrLn :: MonadIO m => a -> m ()
+  {-# MINIMAL hPutStr, hPutStrLn #-}
+newtype Product a = Product {getProduct :: a}
+type role Proxy phantom
+data Proxy (t :: k) = Proxy
+type role Ptr phantom
+data Ptr a = GHC.Ptr.Ptr GHC.Prim.Addr#
+data QSem
+  = Control.Concurrent.QSem.QSem {-# UNPACK #-}(MVar
+                                                  (Int, [MVar ()], [MVar ()]))
+data QSemN
+  = Control.Concurrent.QSemN.QSemN {-# UNPACK #-}(MVar
+                                                    (Int, [(Int, MVar ())], [(Int, MVar ())]))
+data Ratio a = !a :% !a
+type Rational = Ratio Integer
+class Read a where
+  GHC.Read.readsPrec :: Int -> Text.ParserCombinators.ReadP.ReadS a
+  GHC.Read.readList :: Text.ParserCombinators.ReadP.ReadS [a]
+  GHC.Read.readPrec :: Text.ParserCombinators.ReadPrec.ReadPrec a
+  GHC.Read.readListPrec :: Text.ParserCombinators.ReadPrec.ReadPrec
+                             [a]
+  {-# MINIMAL readsPrec | readPrec #-}
+type Reader r = ReaderT r Identity :: * -> *
+type role ReaderT representational representational nominal
+newtype ReaderT r (m :: k -> *) (a :: k)
+  = ReaderT {runReaderT :: r -> m a}
+class (Num a, Ord a) => Real a where
+  toRational :: a -> Rational
+  {-# MINIMAL toRational #-}
+class (RealFrac a, Floating a) => RealFloat a where
+  floatRadix :: a -> Integer
+  floatDigits :: a -> Int
+  floatRange :: a -> (Int, Int)
+  decodeFloat :: a -> (Integer, Int)
+  encodeFloat :: Integer -> Int -> a
+  exponent :: a -> Int
+  significand :: a -> a
+  scaleFloat :: Int -> a -> a
+  isNaN :: a -> Bool
+  isInfinite :: a -> Bool
+  isDenormalized :: a -> Bool
+  isNegativeZero :: a -> Bool
+  isIEEE :: a -> Bool
+  atan2 :: a -> a -> a
+  {-# MINIMAL floatRadix, floatDigits, floatRange, decodeFloat,
+              encodeFloat, isNaN, isInfinite, isDenormalized, isNegativeZero,
+              isIEEE #-}
+class (Real a, Fractional a) => RealFrac a where
+  properFraction :: Integral b => a -> (b, a)
+  truncate :: Integral b => a -> b
+  round :: Integral b => a -> b
+  ceiling :: Integral b => a -> b
+  floor :: Integral b => a -> b
+  {-# MINIMAL properFraction #-}
+type Rec0 = K1 GHC.Generics.R :: * -> * -> *
+newtype RecConError = RecConError GHC.Base.String
+newtype RecSelError = RecSelError GHC.Base.String
+newtype RecUpdError = RecUpdError GHC.Base.String
+type S1 = M1 GHC.Generics.S :: Meta -> (* -> *) -> * -> *
+type role ST nominal representational
+newtype ST s a = GHC.ST.ST (GHC.ST.STRep s a)
+newtype STM a
+  = GHC.Conc.Sync.STM (GHC.Prim.State# GHC.Prim.RealWorld
+                       -> (# GHC.Prim.State# GHC.Prim.RealWorld, a #))
+class Selector (s :: k) where
+  selName :: forall k1 (t :: k -> (* -> *) -> k1 -> *) (f :: *
+                                                             -> *) (a :: k1).
+             t s f a -> [Char]
+  selSourceUnpackedness :: forall k1 (t :: k
+                                           -> (* -> *) -> k1 -> *) (f :: * -> *) (a :: k1).
+                           t s f a -> GHC.Generics.SourceUnpackedness
+  selSourceStrictness :: forall k1 (t :: k
+                                         -> (* -> *) -> k1 -> *) (f :: * -> *) (a :: k1).
+                         t s f a -> GHC.Generics.SourceStrictness
+  selDecidedStrictness :: forall k1 (t :: k
+                                          -> (* -> *) -> k1 -> *) (f :: * -> *) (a :: k1).
+                          t s f a -> GHC.Generics.DecidedStrictness
+  {-# MINIMAL selName, selSourceUnpackedness, selSourceStrictness,
+              selDecidedStrictness #-}
+class Semigroup a where
+  (Data.Semigroup.<>) :: a -> a -> a
+  default (Data.Semigroup.<>) :: Monoid a => a -> a -> a
+  sconcat :: NonEmpty a -> a
+  stimes :: Integral b => b -> a -> a
+class Monoid m => Semiring m where
+  one :: m
+  (<.>) :: m -> m -> m
+  {-# MINIMAL one, (<.>) #-}
+newtype Seq a
+  = Data.Sequence.Seq (Data.Sequence.FingerTree
+                         (Data.Sequence.Elem a))
+type role Set nominal
+data Set a
+  = containers-0.5.7.1:Data.Set.Base.Bin {-# UNPACK #-}containers-0.5.7.1:Data.Set.Base.Size
+                                         !a
+                                         !(Set a)
+                                         !(Set a)
+  | containers-0.5.7.1:Data.Set.Base.Tip
+class Show a where
+  showsPrec :: Int -> a -> GHC.Show.ShowS
+  Protolude.Base.show :: a -> GHC.Base.String
+  showList :: [a] -> GHC.Show.ShowS
+  {-# MINIMAL showsPrec | show #-}
+data SomeAsyncException where
+  SomeAsyncException :: Exception e => e -> SomeAsyncException
+data SomeException where
+  SomeException :: Exception e => e -> SomeException
+data SomeNat where
+  SomeNat :: KnownNat n => (Proxy n) -> SomeNat
+data SomeSymbol where
+  SomeSymbol :: KnownSymbol n => (Proxy n) -> SomeSymbol
+data SrcLoc
+  = SrcLoc {sourceFile :: GHC.Base.String,
+            sourceLine :: Int,
+            sourceColumn :: Int}
+data StablePtr a = GHC.Stable.StablePtr (GHC.Prim.StablePtr# a)
+type State s = StateT s Identity :: * -> *
+type role StateT nominal representational nominal
+newtype StateT s (m :: * -> *) a
+  = StateT {runStateT :: s -> m (a, s)}
+data StaticPtr a
+  = GHC.StaticPtr.StaticPtr GHC.StaticPtr.StaticKey
+                            GHC.StaticPtr.StaticPtrInfo
+                            a
+class Storable a where
+  Foreign.Storable.sizeOf :: a -> Int
+  Foreign.Storable.alignment :: a -> Int
+  Foreign.Storable.peekElemOff :: Ptr a -> Int -> IO a
+  Foreign.Storable.pokeElemOff :: Ptr a -> Int -> a -> IO ()
+  Foreign.Storable.peekByteOff :: Ptr b -> Int -> IO a
+  Foreign.Storable.pokeByteOff :: Ptr b -> Int -> a -> IO ()
+  Foreign.Storable.peek :: Ptr a -> IO a
+  Foreign.Storable.poke :: Ptr a -> a -> IO ()
+  {-# MINIMAL sizeOf,
+              alignment,
+              (peek | peekElemOff | peekByteOff),
+              (poke | pokeElemOff | pokeByteOff) #-}
+class StringConv a b where
+  strConv :: Leniency -> a -> b
+  {-# MINIMAL strConv #-}
+newtype Sum a = Sum {getSum :: a}
+data Symbol
+data Text
+  = Data.Text.Internal.Text {-# UNPACK #-}Data.Text.Array.Array
+                            {-# UNPACK #-}Int
+                            {-# UNPACK #-}Int
+data ThreadId = GHC.Conc.Sync.ThreadId GHC.Prim.ThreadId#
+class (Functor t, Foldable t) => Traversable (t :: * -> *) where
+  traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
+  sequenceA :: Applicative f => t (f a) -> f (t a)
+  mapM :: Monad m => (a -> m b) -> t a -> m (t b)
+  sequence :: Monad m => t (m a) -> m (t a)
+  {-# MINIMAL traverse | sequenceA #-}
+type Type = *
+newtype TypeError = TypeError GHC.Base.String
+data TypeRep
+  = Data.Typeable.Internal.TypeRep {-# UNPACK #-}GHC.Fingerprint.Type.Fingerprint
+                                   GHC.Types.TyCon
+                                   [Data.Typeable.Internal.KindRep]
+                                   [TypeRep]
+class Typeable (a :: k) where
+  Data.Typeable.Internal.typeRep# :: GHC.Prim.Proxy# a -> TypeRep
+  {-# MINIMAL typeRep# #-}
+type role U1 phantom
+data U1 p = U1
+data family URec a p
+data UnicodeException
+  = Data.Text.Encoding.Error.DecodeError GHC.Base.String
+                                         (Maybe Word8)
+  | Data.Text.Encoding.Error.EncodeError GHC.Base.String (Maybe Char)
+type role V1 phantom
+data V1 p
+data Void
+data Word = GHC.Types.W# GHC.Prim.Word#
+data Word16 = GHC.Word.W16# GHC.Prim.Word#
+data Word32 = GHC.Word.W32# GHC.Prim.Word#
+data Word64 = GHC.Word.W64# GHC.Prim.Word#
+data Word8 = GHC.Word.W8# GHC.Prim.Word#
+newtype WordPtr = Foreign.Ptr.WordPtr Word
+newtype WrappedMonoid m
+  = Data.Semigroup.WrapMonoid {Data.Semigroup.unwrapMonoid :: m}
+newtype ZipList a = ZipList {getZipList :: [a]}
+(^) :: (Num a, Integral b) => a -> b -> a
+(^%^) :: Integral a => Rational -> a -> Rational
+(^^) :: (Fractional a, Integral b) => a -> b -> a
+(^^%^^) :: Integral a => Rational -> a -> Rational
+absurd :: Void -> a
+addMVarFinalizer :: MVar a -> IO () -> IO ()
+all :: Foldable t => (a -> Bool) -> t a -> Bool
+allowInterrupt :: IO ()
+always :: STM Bool -> STM ()
+alwaysSucceeds :: STM a -> STM ()
+and :: Foldable t => t Bool -> Bool
+any :: Foldable t => (a -> Bool) -> t a -> Bool
+ap :: Monad m => m (a -> b) -> m a -> m b
+appendFile :: FilePath -> Text -> IO ()
+asTypeOf :: a -> a -> a
+asks :: MonadReader r m => (r -> a) -> m a
+asum :: (Foldable t, Alternative f) => t (f a) -> f a
+async :: IO a -> IO (Async a)
+asyncBound :: IO a -> IO (Async a)
+asyncExceptionFromException ::
+  Exception e => SomeException -> Maybe e
+asyncExceptionToException :: Exception e => e -> SomeException
+asyncOn :: Int -> IO a -> IO (Async a)
+atDef :: a -> [a] -> Int -> a
+atMay :: [a] -> Int -> Maybe a
+atomically :: STM a -> IO a
+bitDefault :: (Bits a, Num a) => Int -> a
+bool :: a -> a -> Bool -> a
+boundedEnumFrom :: (Enum a, Bounded a) => a -> [a]
+boundedEnumFromThen :: (Enum a, Bounded a) => a -> a -> [a]
+bracket :: IO a -> (a -> IO b) -> (a -> IO c) -> IO c
+bracketOnError :: IO a -> (a -> IO b) -> (a -> IO c) -> IO c
+bracket_ :: IO a -> IO b -> IO c -> IO c
+break :: (a -> Bool) -> [a] -> ([a], [a])
+byteSwap16 :: Word16 -> Word16
+byteSwap32 :: Word32 -> Word32
+byteSwap64 :: Word64 -> Word64
+callStack :: HasCallStack => CallStack
+cancel :: Async a -> IO ()
+cancelWith :: Exception e => Async a -> e -> IO ()
+cast :: (Typeable a, Typeable b) => a -> Maybe b
+castWith :: (a :~: b) -> a -> b
+catMaybes :: [Maybe a] -> [a]
+catch :: Exception e => IO a -> (e -> IO a) -> IO a
+catchE ::
+  Monad m => ExceptT e m a -> (e -> ExceptT e' m a) -> ExceptT e' m a
+catchJust ::
+  Exception e => (e -> Maybe b) -> IO a -> (b -> IO a) -> IO a
+catchSTM :: Exception e => STM a -> (e -> STM a) -> STM a
+catches :: IO a -> [Exc.Handler a] -> IO a
+check :: Bool -> STM ()
+chr :: Int -> Char
+cis :: Floating a => a -> Complex a
+coerceWith :: Coercion a b -> a -> b
+comparing :: Ord a => (b -> a) -> b -> b -> Ordering
+concat :: Foldable t => t [a] -> [a]
+concatMap :: Foldable t => (a -> [b]) -> t a -> [b]
+concatMapM :: Monad m => (a -> m [b]) -> [a] -> m [b]
+concurrently :: IO a -> IO b -> IO (a, b)
+conjugate :: Num a => Complex a -> Complex a
+const :: a -> b -> a
+currentCallStack :: IO [GHC.Base.String]
+curry :: ((a, b) -> c) -> a -> b -> c
+cycle :: [a] -> [a]
+cycle1 :: Semigroup m => m -> m
+decodeUtf8 :: ByteString -> Text
+decodeUtf8' :: ByteString -> Either UnicodeException Text
+decodeUtf8With :: OnDecodeError -> ByteString -> Text
+deepseq :: NFData a => a -> b -> b
+denominator :: Ratio a -> a
+diff :: Semigroup m => m -> Endo m
+divZeroError :: a
+drop :: Int -> [a] -> [a]
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dupChan :: Chan a -> IO (Chan a)
+either :: (a -> c) -> (b -> c) -> Either a b -> c
+eitherA :: Alternative f => f a -> f b -> f (Either a b)
+encodeUtf8 :: Text -> ByteString
+eqT ::
+  forall k (a :: k) (b :: k).
+  (Typeable a, Typeable b) =>
+  Maybe (a :~: b)
+evalState :: State s a -> s -> a
+evalStateT :: Monad m => StateT s m a -> s -> m a
+evaluate :: a -> IO a
+even :: Integral a => a -> Bool
+execState :: State s a -> s -> s
+execStateT :: Monad m => StateT s m a -> s -> m s
+exitFailure :: IO a
+exitSuccess :: IO a
+exitWith :: ExitCode -> IO a
+filter :: (a -> Bool) -> [a] -> [a]
+filterM :: Applicative m => (a -> m Bool) -> [a] -> m [a]
+finally :: IO a -> IO b -> IO a
+find :: Foldable t => (a -> Bool) -> t a -> Maybe a
+fix :: (a -> a) -> a
+fixST :: (a -> ST s a) -> ST s a
+flip :: (a -> b -> c) -> b -> a -> c
+fmapDefault :: Traversable t => (a -> b) -> t a -> t b
+foldM ::
+  (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
+foldM_ ::
+  (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m ()
+foldMapDefault :: (Traversable t, Monoid m) => (a -> m) -> t a -> m
+foldl1May :: (a -> a -> a) -> [a] -> Maybe a
+foldl1May' :: (a -> a -> a) -> [a] -> Maybe a
+foldlM ::
+  (Foldable t, Monad m) => (b -> a -> m b) -> b -> t a -> m b
+foldr1May :: (a -> a -> a) -> [a] -> Maybe a
+foldrM ::
+  (Foldable t, Monad m) => (a -> b -> m b) -> b -> t a -> m b
+for ::
+  (Traversable t, Applicative f) => t a -> (a -> f b) -> f (t b)
+forM :: (Traversable t, Monad m) => t a -> (a -> m b) -> m (t b)
+forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
+for_ :: (Foldable t, Applicative f) => t a -> (a -> f b) -> f ()
+force :: NFData a => a -> a
+foreach :: Functor f => f a -> (a -> b) -> f b
+forever :: Applicative f => f a -> f b
+forkFinally ::
+  IO a -> (Either SomeException a -> IO ()) -> IO ThreadId
+forkIO :: IO () -> IO ThreadId
+forkIOWithUnmask ::
+  ((forall a. IO a -> IO a) -> IO ()) -> IO ThreadId
+forkOS :: IO () -> IO ThreadId
+forkOSWithUnmask ::
+  ((forall a. IO a -> IO a) -> IO ()) -> IO ThreadId
+forkOn :: Int -> IO () -> IO ThreadId
+forkOnWithUnmask ::
+  Int -> ((forall a. IO a -> IO a) -> IO ()) -> IO ThreadId
+fromIntegral :: (Integral a, Num b) => a -> b
+fromLeft :: a -> Either a b -> a
+fromMaybe :: a -> Maybe a -> a
+fromRight :: b -> Either a b -> b
+fromStrict :: Text -> Data.Text.Internal.Lazy.Text
+fst :: (a, b) -> a
+gcastWith ::
+  forall k (a :: k) (b :: k) r. (a :~: b) -> (a ~ b => r) -> r
+gcd :: Integral a => a -> a -> a
+gcdInt' :: Int -> Int -> Int
+gcdWord' :: Word -> Word -> Word
+genericDrop :: Integral i => i -> [a] -> [a]
+genericLength :: Num i => [a] -> i
+genericReplicate :: Integral i => i -> a -> [a]
+genericSplitAt :: Integral i => i -> [a] -> ([a], [a])
+genericTake :: Integral i => i -> [a] -> [a]
+getArgs :: IO [GHC.Base.String]
+getCallStack :: CallStack -> [([Char], GHC.Stack.Types.SrcLoc)]
+getChanContents :: Chan a -> IO [a]
+getContents :: IO Text
+getLine :: IO Text
+getMaskingState :: IO MaskingState
+getNumCapabilities :: IO Int
+getStackTrace :: IO (Maybe [Location])
+gets :: MonadState s m => (s -> a) -> m a
+group :: Eq a => [a] -> [[a]]
+groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
+guard :: Alternative f => Bool -> f ()
+guardM :: MonadPlus m => m Bool -> m ()
+handle :: Exception e => (e -> IO a) -> IO a -> IO a
+handleJust ::
+  Exception e => (e -> Maybe b) -> (b -> IO a) -> IO a -> IO a
+hashUsing :: Hashable b => (a -> b) -> Int -> a -> Int
+head :: Foldable f => f a -> Maybe a
+headDef :: a -> [a] -> a
+headMay :: [a] -> Maybe a
+hush :: Alternative m => Either e a -> m a
+ifM :: Monad m => m Bool -> m a -> m a -> m a
+ignore :: OnError a b
+imagPart :: Complex a -> a
+infinity :: Rational
+initDef :: [a] -> [a] -> [a]
+initMay :: [a] -> Maybe [a]
+initSafe :: [a] -> [a]
+inits :: [a] -> [[a]]
+integralEnumFrom :: (Integral a, Bounded a) => a -> [a]
+integralEnumFromThen :: (Integral a, Bounded a) => a -> a -> [a]
+integralEnumFromThenTo :: Integral a => a -> a -> a -> [a]
+integralEnumFromTo :: Integral a => a -> a -> [a]
+interact :: (Text -> Text) -> IO ()
+intercalate :: [a] -> [[a]] -> [a]
+interruptible :: IO a -> IO a
+intersperse :: a -> [a] -> [a]
+ioError :: GHC.IO.Exception.IOError -> IO a
+isCurrentThreadBound :: IO Bool
+isEmptyChan :: Chan a -> IO Bool
+isEmptyMVar :: MVar a -> IO Bool
+isJust :: Maybe a -> Bool
+isLeft :: Either a b -> Bool
+isNothing :: Maybe a -> Bool
+isPrefixOf :: Eq a => [a] -> [a] -> Bool
+isRight :: Either a b -> Bool
+iterate :: (a -> a) -> a -> [a]
+join :: Monad m => m (m a) -> m a
+killThread :: ThreadId -> IO ()
+lastDef :: a -> [a] -> a
+lastMay :: [a] -> Maybe a
+lcm :: Integral a => a -> a -> a
+leftToMaybe :: Either l r -> Maybe l
+lefts :: [Either a b] -> [a]
+lenientDecode :: OnDecodeError
+class Control.Monad.Trans.Class.MonadTrans (t :: (* -> *)
+                                                 -> * -> *) where
+  lift :: Monad m => m a -> t m a
+liftA :: Applicative f => (a -> b) -> f a -> f b
+liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c
+liftA3 ::
+  Applicative f => (a -> b -> c -> d) -> f a -> f b -> f c -> f d
+liftAA2 ::
+  (Applicative f, Applicative g) =>
+  (a -> b -> c) -> f (g a) -> f (g b) -> f (g c)
+liftM :: Monad m => (a1 -> r) -> m a1 -> m r
+liftM' :: Monad m => (a -> b) -> m a -> m b
+liftM2 :: Monad m => (a1 -> a2 -> r) -> m a1 -> m a2 -> m r
+liftM2' :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+liftM3 ::
+  Monad m => (a1 -> a2 -> a3 -> r) -> m a1 -> m a2 -> m a3 -> m r
+liftM4 ::
+  Monad m =>
+  (a1 -> a2 -> a3 -> a4 -> r) -> m a1 -> m a2 -> m a3 -> m a4 -> m r
+liftM5 ::
+  Monad m =>
+  (a1 -> a2 -> a3 -> a4 -> a5 -> r)
+  -> m a1 -> m a2 -> m a3 -> m a4 -> m a5 -> m r
+lines :: Text -> [Text]
+link :: Async a -> IO ()
+link2 :: Async a -> Async b -> IO ()
+list :: [b] -> (a -> b) -> [a] -> [b]
+listToMaybe :: [a] -> Maybe a
+magnitude :: RealFloat a => Complex a -> a
+mapAccumL ::
+  Traversable t => (a -> b -> (a, c)) -> a -> t b -> (a, t c)
+mapAccumR ::
+  Traversable t => (a -> b -> (a, c)) -> a -> t b -> (a, t c)
+mapAndUnzipM ::
+  Applicative m => (a -> m (b, c)) -> [a] -> m ([b], [c])
+mapExcept ::
+  (Either e a -> Either e' b) -> Except e a -> Except e' b
+mapExceptT ::
+  (m (Either e a) -> n (Either e' b))
+  -> ExceptT e m a -> ExceptT e' n b
+mapException ::
+  (Exception e1, Exception e2) => (e1 -> e2) -> a -> a
+mapM_ :: (Foldable t, Monad m) => (a -> m b) -> t a -> m ()
+mapMaybe :: (a -> Maybe b) -> [a] -> [b]
+mask :: ((forall a. IO a -> IO a) -> IO b) -> IO b
+mask_ :: IO a -> IO a
+maxInt :: Int
+maximumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
+maximumDef :: Ord a => a -> [a] -> a
+maximumMay :: Ord a => [a] -> Maybe a
+maybe :: b -> (a -> b) -> Maybe a -> b
+maybeEmpty :: Monoid b => (a -> b) -> Maybe a -> b
+maybeToEither :: e -> Maybe a -> Either e a
+maybeToLeft :: r -> Maybe l -> Either l r
+maybeToList :: Maybe a -> [a]
+maybeToRight :: l -> Maybe r -> Either l r
+mfilter :: MonadPlus m => (a -> Bool) -> m a -> m a
+minInt :: Int
+minimumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
+minimumDef :: Ord a => a -> [a] -> a
+minimumMay :: Ord a => [a] -> Maybe a
+mkPolar :: Floating a => a -> a -> Complex a
+mkWeakMVar :: MVar a -> IO () -> IO (GHC.Weak.Weak (MVar a))
+mkWeakThreadId :: ThreadId -> IO (GHC.Weak.Weak ThreadId)
+modify :: MonadState s m => (s -> s) -> m ()
+modifyMVar :: MVar a -> (a -> IO (a, b)) -> IO b
+modifyMVarMasked :: MVar a -> (a -> IO (a, b)) -> IO b
+modifyMVarMasked_ :: MVar a -> (a -> IO a) -> IO ()
+modifyMVar_ :: MVar a -> (a -> IO a) -> IO ()
+msum :: (Foldable t, MonadPlus m) => t (m a) -> m a
+mtimesDefault :: (Integral b, Monoid a) => b -> a -> a
+myThreadId :: IO ThreadId
+natVal :: KnownNat n => proxy n -> Integer
+newChan :: IO (Chan a)
+newEmptyMVar :: IO (MVar a)
+newMVar :: a -> IO (MVar a)
+newQSem :: Int -> IO QSem
+newQSemN :: Int -> IO QSemN
+nonEmpty :: [a] -> Maybe (NonEmpty a)
+not :: Bool -> Bool
+notANumber :: Rational
+notElem :: (Foldable t, Eq a) => a -> t a -> Bool
+notImplemented :: a
+note :: MonadError e m => e -> Maybe a -> m a
+numerator :: Ratio a -> a
+numericEnumFrom :: Fractional a => a -> [a]
+numericEnumFromThen :: Fractional a => a -> a -> [a]
+numericEnumFromThenTo ::
+  (Ord a, Fractional a) => a -> a -> a -> [a]
+numericEnumFromTo :: (Ord a, Fractional a) => a -> a -> [a]
+odd :: Integral a => a -> Bool
+on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+onException :: IO a -> IO b -> IO a
+openFile :: FilePath -> IOMode -> IO Handle
+option :: b -> (a -> b) -> Option a -> b
+optional :: Alternative f => f a -> f (Maybe a)
+or :: Foldable t => t Bool -> Bool
+orAlt :: (Alternative f, Monoid a) => f a -> f a
+orElse :: STM a -> STM a -> STM a
+orEmpty :: Alternative f => Bool -> a -> f a
+ord :: Char -> Int
+ordNub :: Ord a => [a] -> [a]
+otherwise :: Bool
+overflowError :: a
+panic :: HasCallStack => Text -> a
+partitionEithers :: [Either a b] -> ([a], [b])
+permutations :: [a] -> [[a]]
+phase :: RealFloat a => Complex a -> a
+polar :: RealFloat a => Complex a -> (a, a)
+poll :: Async a -> IO (Maybe (Either SomeException a))
+popCountDefault :: (Bits a, Num a) => a -> Int
+prettyCallStack :: CallStack -> GHC.Base.String
+prettySrcLoc :: GHC.Stack.Types.SrcLoc -> GHC.Base.String
+product :: (Foldable f, Num a) => f a -> a
+purer :: (Applicative f, Applicative g) => a -> f (g a)
+putByteString :: MonadIO m => ByteString -> m ()
+putErrText :: MonadIO m => Text -> m ()
+putLByteString ::
+  MonadIO m => Data.ByteString.Lazy.Internal.ByteString -> m ()
+putLText :: MonadIO m => Data.Text.Internal.Lazy.Text -> m ()
+putMVar :: MVar a -> a -> IO ()
+putText :: MonadIO m => Text -> m ()
+race :: IO a -> IO b -> IO (Either a b)
+race_ :: IO a -> IO b -> IO ()
+ratioPrec :: Int
+ratioPrec1 :: Int
+ratioZeroDenominatorError :: a
+readChan :: Chan a -> IO a
+readEither :: Read a => GHC.Base.String -> Either GHC.Base.String a
+readFile :: FilePath -> IO Text
+readMVar :: MVar a -> IO a
+readMaybe :: Read a => GHC.Base.String -> Maybe a
+reads :: Read a => Text.ParserCombinators.ReadP.ReadS a
+realPart :: Complex a -> a
+realToFrac :: (Real a, Fractional b) => a -> b
+reduce :: Integral a => a -> a -> Ratio a
+repeat :: a -> [a]
+replace :: b -> OnError a b
+replicate :: Int -> a -> [a]
+replicateM :: Applicative m => Int -> m a -> m [a]
+replicateM_ :: Applicative m => Int -> m a -> m ()
+repr :: forall k (a :: k) (b :: k). (a :~: b) -> Coercion a b
+retry :: STM a
+reverse :: [a] -> [a]
+rightToMaybe :: Either l r -> Maybe r
+rights :: [Either a b] -> [b]
+rtsSupportsBoundThreads :: Bool
+runExcept :: Except e a -> Either e a
+runExceptT :: ExceptT e m a -> m (Either e a)
+runInBoundThread :: IO a -> IO a
+runInUnboundThread :: IO a -> IO a
+runReader :: Reader r a -> r -> a
+runST :: (forall s. ST s a) -> a
+runState :: State s a -> s -> (a, s)
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl' :: (b -> a -> b) -> b -> [a] -> [b]
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+seq :: a -> b -> b
+sequenceA_ :: (Foldable t, Applicative f) => t (f a) -> f ()
+sequence_ :: (Foldable t, Monad m) => t (m a) -> m ()
+setNumCapabilities :: Int -> IO ()
+showStackTrace :: IO (Maybe GHC.Base.String)
+signalQSem :: QSem -> IO ()
+signalQSemN :: QSemN -> Int -> IO ()
+snd :: (a, b) -> b
+someNatVal :: Integer -> Maybe SomeNat
+someSymbolVal :: GHC.Base.String -> SomeSymbol
+sort :: Ord a => [a] -> [a]
+sortBy :: (a -> a -> Ordering) -> [a] -> [a]
+sortOn :: Ord o => (a -> o) -> [a] -> [a]
+splitAt :: Int -> [a] -> ([a], [a])
+stderr :: Handle
+stdin :: Handle
+stdout :: Handle
+stimesIdempotent :: Integral b => b -> a -> a
+stimesIdempotentMonoid :: (Integral b, Monoid a) => b -> a -> a
+stimesMonoid :: (Integral b, Monoid a) => b -> a -> a
+strictDecode :: OnDecodeError
+subsequences :: [a] -> [[a]]
+subtract :: Num a => a -> a -> a
+sum :: (Foldable f, Num a) => f a -> a
+swap :: (a, b) -> (b, a)
+swapMVar :: MVar a -> a -> IO a
+sym :: forall k (a :: k) (b :: k). (a :~: b) -> b :~: a
+symbolVal :: KnownSymbol n => proxy n -> GHC.Base.String
+tailDef :: [a] -> [a] -> [a]
+tailMay :: [a] -> Maybe [a]
+tailSafe :: [a] -> [a]
+tails :: [a] -> [[a]]
+take :: Int -> [a] -> [a]
+takeMVar :: MVar a -> IO a
+takeWhile :: (a -> Bool) -> [a] -> [a]
+testBitDefault :: (Bits a, Num a) => a -> Int -> Bool
+threadCapability :: ThreadId -> IO (Int, Bool)
+threadDelay :: Int -> IO ()
+threadWaitRead :: System.Posix.Types.Fd -> IO ()
+threadWaitReadSTM :: System.Posix.Types.Fd -> IO (STM (), IO ())
+threadWaitWrite :: System.Posix.Types.Fd -> IO ()
+threadWaitWriteSTM :: System.Posix.Types.Fd -> IO (STM (), IO ())
+throwE :: Monad m => e -> ExceptT e m a
+throwSTM :: Exception e => e -> STM a
+toIntegralSized ::
+  (Integral a, Integral b, Bits a, Bits b) => a -> Maybe b
+toS :: StringConv a b => a -> b
+toSL :: StringConv a b => a -> b
+toStrict :: Data.Text.Internal.Lazy.Text -> Text
+trace :: Print b => b -> a -> a
+traceIO :: Print b => b -> a -> IO a
+traceId :: Text -> Text
+traceM :: Monad m => Text -> m ()
+traceShow :: Show a => a -> b -> b
+traceShowId :: Show a => a -> a
+traceShowM :: (Show a, Monad m) => a -> m ()
+trans ::
+  forall k (a :: k) (b :: k) (c :: k).
+  (a :~: b) -> (b :~: c) -> a :~: c
+transpose :: [[a]] -> [[a]]
+traverse_ ::
+  (Foldable t, Applicative f) => (a -> f b) -> t a -> f ()
+try :: Exception e => IO a -> IO (Either e a)
+tryIO :: MonadIO m => IO a -> ExceptT IOException m a
+tryJust :: Exception e => (e -> Maybe b) -> IO a -> IO (Either b a)
+tryPutMVar :: MVar a -> a -> IO Bool
+tryReadMVar :: MVar a -> IO (Maybe a)
+tryTakeMVar :: MVar a -> IO (Maybe a)
+typeRep ::
+  forall k (proxy :: k -> *) (a :: k).
+  Typeable a =>
+  proxy a -> TypeRep
+unGetChan :: Chan a -> a -> IO ()
+uncurry :: (a -> b -> c) -> (a, b) -> c
+undefined :: a
+unfoldr :: (b -> Maybe (a, b)) -> b -> [a]
+uninterruptibleMask :: ((forall a. IO a -> IO a) -> IO b) -> IO b
+uninterruptibleMask_ :: IO a -> IO a
+unless :: Applicative f => Bool -> f () -> f ()
+unlessM :: Monad m => m Bool -> m () -> m ()
+unlines :: [Text] -> Text
+until :: (a -> Bool) -> (a -> a) -> a -> a
+unwords :: [Text] -> Text
+unzip :: [(a, b)] -> ([a], [b])
+vacuous :: Functor f => f Void -> f a
+void :: Functor f => f a -> f ()
+wait :: Async a -> IO a
+waitAny :: [Async a] -> IO (Async a, a)
+waitAnyCancel :: [Async a] -> IO (Async a, a)
+waitAnyCatch :: [Async a] -> IO (Async a, Either SomeException a)
+waitAnyCatchCancel ::
+  [Async a] -> IO (Async a, Either SomeException a)
+waitBoth :: Async a -> Async b -> IO (a, b)
+waitCatch :: Async a -> IO (Either SomeException a)
+waitEither :: Async a -> Async b -> IO (Either a b)
+waitEitherCancel :: Async a -> Async b -> IO (Either a b)
+waitEitherCatch ::
+  Async a
+  -> Async b
+  -> IO (Either (Either SomeException a) (Either SomeException b))
+waitEitherCatchCancel ::
+  Async a
+  -> Async b
+  -> IO (Either (Either SomeException a) (Either SomeException b))
+waitEither_ :: Async a -> Async b -> IO ()
+waitQSem :: QSem -> IO ()
+waitQSemN :: QSemN -> Int -> IO ()
+when :: Applicative f => Bool -> f () -> f ()
+whenM :: Monad m => m Bool -> m () -> m ()
+withAsync :: IO a -> (Async a -> IO b) -> IO b
+withAsyncBound :: IO a -> (Async a -> IO b) -> IO b
+withAsyncOn :: Int -> IO a -> (Async a -> IO b) -> IO b
+withExcept :: (e -> e') -> Except e a -> Except e' a
+withExceptT ::
+  Functor m => (e -> e') -> ExceptT e m a -> ExceptT e' m a
+withFile :: FilePath -> IOMode -> (Handle -> IO r) -> IO r
+withFrozenCallStack :: HasCallStack => (HasCallStack => a) -> a
+withMVar :: MVar a -> (a -> IO b) -> IO b
+withMVarMasked :: MVar a -> (a -> IO b) -> IO b
+withState :: (s -> s) -> State s a -> State s a
+witness :: a
+words :: Text -> [Text]
+writeChan :: Chan a -> a -> IO ()
+writeFile :: FilePath -> Text -> IO ()
+writeList2Chan :: Chan a -> [a] -> IO ()
+zero :: Monoid m => m
+zip :: [a] -> [b] -> [(a, b)]
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWithM :: Applicative m => (a -> b -> m c) -> [a] -> [b] -> m [c]
+zipWithM_ :: Applicative m => (a -> b -> m c) -> [a] -> [b] -> m ()
+(||) :: Bool -> Bool -> Bool
+(||^) :: Monad m => m Bool -> m Bool -> m Bool
